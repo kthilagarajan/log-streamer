@@ -1,0 +1,50 @@
+
+<title>Workflow Dev Logs</title>
+<style>
+body{
+	background:#000;
+	color: #E0E0E0;
+	overflow-x:hidden;
+	font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+	font-size:14px;
+}
+#filter {
+	position: fixed;
+	right: 5%;
+	top: 2%;
+}
+div {
+	position: fixed;
+	right: 5%;
+	top: 6%;
+}
+</style>
+<body>
+	
+	<input type="text" id="filter" placeholder="Add filter"/>
+	<div>
+	<button onclick="stop()">Stop</button>
+	<button onclick="proceed()">Continue</button>
+	</div>
+</body>
+<script src="./jquery.js"></script>
+<script src="./socket-io.js"></script>
+<script>
+  var socket = io();
+  var stopped = false
+  socket.on('log_data', function(msg){
+	  if(msg.indexOf($("#filter").val()) >= 0 && !stopped){
+			$('body').append(msg+"<br/>");
+		$("html, body").animate({ scrollTop: $(document).height() }, 0);
+	  }      
+	  
+    });
+	
+	function stop(){
+			stopped = true;
+	}
+	
+	function proceed(){
+			stopped = false;
+		}
+</script>
